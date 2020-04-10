@@ -25,6 +25,7 @@ def get_session_cookie(usr, passwd):
         browser.find_element_by_name("login").click()
         sleep(5)
         pickle.dump(browser.get_cookies(), open("cookies.pkl", "wb"))
+        browser.close()
 
 if __name__ == "__main__":
     get_session_cookie(username, passwd)
