@@ -18,7 +18,7 @@ def initialise_browser():
         cookies = pickle.load(open("cookies.pkl", "rb"))
         for cookie in cookies:
             driver.add_cookie(cookie)
-            print("Loaded cookies!")
+        print("Loaded all cookies!")
     except Exception:
         print("No cookies detected, exiting.")
         exit()
@@ -32,18 +32,27 @@ def screenshot(driver, url):
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll' + X)
     driver.set_window_size(S('Width'), S('Height'))  # May need manual adjustment
     driver.find_element_by_tag_name('body').screenshot("./screenshots/" + question_id(url) + ".png")
+    print("Screenshot has been taken successfully.")
 
 
 if __name__ == "__main__":
     firefox = initialise_browser()
+    print("Browser initialised...")
     socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     socket.bind(("127.0.0.1", 5000))
     while True:
         try:
-            url = socket.recv(500).decode("utf-8")
+            print("Stand by...")
+            url = socket.recv(500).decode("utf-8").strip()
+            print("received url :" + url)
+            if url == "KILL":
+                firefox.close()
+                exit()
+
+            screenshot(firefox, url)
             # Check to see if question ID already exists in the data base
             # pass it in the screenshot function
         except Exception as e:
             print(e)
-            print("Handled. Continue on.")
+            print("Error Handled. Continue on.")
             continue

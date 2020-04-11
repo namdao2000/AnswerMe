@@ -3,3 +3,6 @@ cookies.pkl
 geckodriver.log
 Credentials.py
 screenshots
+TestScreenshotFunction.py
+reciver.py
+sender.py
